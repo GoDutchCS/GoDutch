@@ -20,7 +20,7 @@ public class GalleryFragment extends Fragment {
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getContext(), 3);
         RecyclerView recyclerView = root.findViewById(R.id.gallery);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
