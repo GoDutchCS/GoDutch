@@ -38,11 +38,11 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        if (accessToken != null && !accessToken.isExpired()) {
-            startActivity(new Intent(FacebookActivity.this, MainActivity.class));
-            finish();
-        }
+        if (accessToken != null && !accessToken.isExpired())
+            launchMainActivity();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook);
 
@@ -81,11 +81,11 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
                             e.printStackTrace();
                         }
 
-                        if (isMember) {
-                            startActivity(new Intent(FacebookActivity.this, MainActivity.class));
-                        } else {
+                        if (isMember)
+                            launchMainActivity();
+                        else
                             launchRegisterDialog();
-                        }
+
                     }
                 });
             }
@@ -145,8 +145,13 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
                     e.printStackTrace();
                 }
 
-                startActivity(new Intent(FacebookActivity.this, MainActivity.class));
+                launchMainActivity();
             }
         });
+    }
+
+    public void launchMainActivity() {
+        startActivity(new Intent(FacebookActivity.this, MainActivity.class));
+        finish();
     }
 }
