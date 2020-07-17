@@ -55,5 +55,6 @@ public class MainActivity extends AppCompatActivity {
             LoginManager.getInstance().logOut();
         }
         startActivity(new Intent(MainActivity.this, FacebookActivity.class));
+        finish();
     }
 }

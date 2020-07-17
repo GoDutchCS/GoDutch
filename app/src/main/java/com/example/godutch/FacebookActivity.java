@@ -39,9 +39,8 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
     protected void onCreate(Bundle savedInstanceState) {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         if (accessToken != null && !accessToken.isExpired())
-            launchMainActivity();
+            launchMainActivity(accessToken.getUserId());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook);
@@ -74,18 +73,19 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
                         final String jsonString = response.body().string();
                         userData = null;
                         boolean isMember = false;
+                        String id = null;
                         try {
                             userData = new JSONObject(jsonString);
                             isMember = userData.getBoolean("member");
+                            id = userData.getString("id");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
                         if (isMember)
-                            launchMainActivity();
+                            launchMainActivity(id);
                         else
                             launchRegisterDialog();
-
                     }
                 });
             }
@@ -139,19 +139,23 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
                 JSONObject data = null;
+                String id = null;
                 try {
                     data = new JSONObject(jsonString);
+                    id = data.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                launchMainActivity();
+                launchMainActivity(id);
             }
         });
     }
 
-    public void launchMainActivity() {
-        startActivity(new Intent(FacebookActivity.this, MainActivity.class));
+    public void launchMainActivity(String id) {
+        Intent intent = new Intent(FacebookActivity.this, MainActivity.class);
+        intent.putExtra("USER_ID", id);
+        startActivity(intent);
         finish();
     }
 }
