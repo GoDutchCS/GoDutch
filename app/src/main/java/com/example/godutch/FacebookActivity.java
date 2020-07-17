@@ -61,7 +61,6 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
                         .post(body)
                         .build();
 
-
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
