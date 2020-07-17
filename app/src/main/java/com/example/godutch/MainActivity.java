@@ -1,7 +1,12 @@
 package com.example.godutch;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,4 +32,28 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.profile_button) {
+            logOut();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void logOut() {
+        AccessToken.setCurrentAccessToken(null);
+        if (LoginManager.getInstance() != null) {
+            LoginManager.getInstance().logOut();
+        }
+        startActivity(new Intent(MainActivity.this, FacebookActivity.class));
+    }
 }
