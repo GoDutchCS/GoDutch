@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +24,8 @@ import com.example.godutch.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -48,10 +41,11 @@ import okhttp3.Response;
 public class GalleryFragment extends Fragment {
     private GalleryViewModel galleryViewModel;
     private FloatingActionButton fab;
-    private static int PICK_IMAGE_MULTIPLE = 1;
-    private static int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 8;
     private final OkHttpClient client = new OkHttpClient();
+    ImageGalleryAdapter adapter;
+    private static int PICK_IMAGE_MULTIPLE = 1;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 8;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
@@ -62,14 +56,14 @@ public class GalleryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        ImageGalleryAdapter adapter = new ImageGalleryAdapter(this.getContext(), GoDutchPhoto.getPhotos());
+        requestGalleryPermission();
+        adapter = new ImageGalleryAdapter(this.getContext(), this.getActivity());
         recyclerView.setAdapter(adapter);
 
         fab = root.findViewById(R.id.gallery_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestGalleryPermission();
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -159,6 +153,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
+                adapter.fetchPhotos(getActivity().getIntent().getStringExtra("USER_ID"));
             }
         });
     }
