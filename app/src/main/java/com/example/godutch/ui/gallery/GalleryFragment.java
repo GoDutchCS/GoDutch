@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -53,7 +54,6 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     private final OkHttpClient client = new OkHttpClient();
     private ImageGalleryAdapter adapter;
     private Animation fab_open, fab_close;
-    private File currentPhotoFile;
     private Uri currentImageUri;
     private boolean isFabOpen = false;
     private static int PICK_IMAGE_MULTIPLE = 1;
@@ -106,10 +106,17 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                 requestRequiredPermissions();
                 launchCamera();
                 break;
+            case R.id.add_options:
+                options
+                    .animate()
+                    .rotation(isFabOpen ? 45 : 0)
+                    .setInterpolator(new LinearInterpolator())
+                    .setDuration(300);
+                break;
         }
     }
 
-    public void animate() {
+    private void animate() {
         if (isFabOpen) {
             galleryAdd.startAnimation(fab_close);
             cameraAdd.startAnimation(fab_close);
