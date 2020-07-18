@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.profile_button) {
-            logOut();
+            //logOut();//fortest
         }
 
         return super.onOptionsItemSelected(item);
