@@ -45,17 +45,6 @@ public class GoDutchPhoto implements Parcelable {
         this.title = title;
     }
 
-    public static GoDutchPhoto[] getPhotos() {
-        return new GoDutchPhoto[]{
-                new GoDutchPhoto("http://i.imgur.com/zuG2bGQ.jpg", "Galaxy"),
-                new GoDutchPhoto("http://i.imgur.com/ovr0NAF.jpg", "Space Shuttle"),
-                new GoDutchPhoto("http://i.imgur.com/n6RfJX2.jpg", "Galaxy Orion"),
-                new GoDutchPhoto("http://i.imgur.com/qpr5LR2.jpg", "Earth"),
-                new GoDutchPhoto("http://i.imgur.com/pSHXfu5.jpg", "Astronaut"),
-                new GoDutchPhoto("http://i.imgur.com/3wQcZeY.jpg", "Satellite"),
-        };
-    }
-
     @Override
     public int describeContents() {
         return 0;
