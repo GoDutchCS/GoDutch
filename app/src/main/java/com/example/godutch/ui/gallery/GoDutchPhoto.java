@@ -3,6 +3,8 @@ package com.example.godutch.ui.gallery;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.godutch.Constants;
+
 public class GoDutchPhoto implements Parcelable {
     private String url;
     private String title;
@@ -54,5 +56,10 @@ public class GoDutchPhoto implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(this.url);
         parcel.writeString(this.title);
+    }
+
+    @Override
+    public String toString() {
+        return "/tmp" + this.url.substring(Constants.SERVER_IP.length() + 1);
     }
 }
