@@ -8,11 +8,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -33,7 +33,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -50,12 +49,13 @@ import okhttp3.Response;
 
 public class GalleryFragment extends Fragment implements View.OnClickListener {
     private GalleryViewModel galleryViewModel;
-    private FloatingActionButton options, galleryAdd, cameraAdd;
+    protected FloatingActionButton options, galleryAdd, cameraAdd;
     private final OkHttpClient client = new OkHttpClient();
     private ImageGalleryAdapter adapter;
     private Animation fab_open, fab_close;
     private Uri currentImageUri;
     private boolean isFabOpen = false;
+    protected boolean deleteMode = false;
     private static int PICK_IMAGE_MULTIPLE = 1;
     private static int PICTURE_RESULT = 2;
     private static String[] requiredPermissions = new String[]{
@@ -77,7 +77,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(layoutManager);
 
         requestRequiredPermissions();
-        adapter = new ImageGalleryAdapter(this.getContext(), this.getActivity());
+        adapter = new ImageGalleryAdapter(this.getContext(), this.getActivity(), this);
         recyclerView.setAdapter(adapter);
 
         options = root.findViewById(R.id.add_options);
@@ -96,23 +96,25 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        animate();
-        switch (id) {
-            case R.id.gallery_add:
-                requestRequiredPermissions();
-                launchGallery();
-                break;
-            case R.id.camera_add:
-                requestRequiredPermissions();
-                launchCamera();
-                break;
-            case R.id.add_options:
-                options
-                    .animate()
-                    .rotation(isFabOpen ? 45 : 0)
-                    .setInterpolator(new LinearInterpolator())
-                    .setDuration(300);
-                break;
+
+        if (id == R.id.gallery_add) {
+            animate();
+            requestRequiredPermissions();
+            launchGallery();
+        } else if (id == R.id.camera_add) {
+            animate();
+            requestRequiredPermissions();
+            launchCamera();
+        } else if (id == R.id.add_options) {
+            if (deleteMode) {
+                for (Integer photoIndex : adapter.selectedPhotos) {
+                }
+            } else {
+                animate();
+                options.animate().rotation(isFabOpen ? 135 : 0)
+                        .setInterpolator(new LinearInterpolator())
+                        .setDuration(300);
+            }
         }
     }
 
@@ -145,11 +147,6 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
 
         if (!allGranted)
             requestPermissions(requiredPermissions, PERMISSIONS_REQUEST_ALL);
-    }
-
-    private void requestGalleryPermission() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE }, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
     }
 
     @Override
