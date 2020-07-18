@@ -2,15 +2,21 @@ package com.example.godutch.ui.gallery;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -26,8 +32,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,14 +47,25 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements View.OnClickListener {
     private GalleryViewModel galleryViewModel;
-    private FloatingActionButton fab;
+    private FloatingActionButton options, galleryAdd, cameraAdd;
     private final OkHttpClient client = new OkHttpClient();
-    ImageGalleryAdapter adapter;
+    private ImageGalleryAdapter adapter;
+    private Animation fab_open, fab_close;
+    private File currentPhotoFile;
+    private Uri currentImageUri;
+    private boolean isFabOpen = false;
     private static int PICK_IMAGE_MULTIPLE = 1;
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 8;
+    private static int PICTURE_RESULT = 2;
+    private static String[] requiredPermissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
+    private static int PERMISSIONS_REQUEST_ALL = 8;
+    private static int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 9;
+    private static int PERMISSIONS_REQUEST_IMAGE_CAPTURE = 10;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
@@ -56,23 +76,68 @@ public class GalleryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        requestGalleryPermission();
+        requestRequiredPermissions();
         adapter = new ImageGalleryAdapter(this.getContext(), this.getActivity());
         recyclerView.setAdapter(adapter);
 
-        fab = root.findViewById(R.id.gallery_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGE_MULTIPLE);
-            }
-        });
+        options = root.findViewById(R.id.add_options);
+        options.setOnClickListener(this);
+        galleryAdd = root.findViewById(R.id.gallery_add);
+        galleryAdd.setOnClickListener(this);
+        cameraAdd = root.findViewById(R.id.camera_add);
+        cameraAdd.setOnClickListener(this);
+
+        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
 
         return root;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        animate();
+        switch (id) {
+            case R.id.gallery_add:
+                requestRequiredPermissions();
+                launchGallery();
+                break;
+            case R.id.camera_add:
+                requestRequiredPermissions();
+                launchCamera();
+                break;
+        }
+    }
+
+    public void animate() {
+        if (isFabOpen) {
+            galleryAdd.startAnimation(fab_close);
+            cameraAdd.startAnimation(fab_close);
+            galleryAdd.setVisibility(View.GONE);
+            cameraAdd.setVisibility(View.GONE);
+            galleryAdd.setClickable(false);
+            cameraAdd.setClickable(false);
+            isFabOpen = false;
+        } else {
+            galleryAdd.startAnimation(fab_open);
+            cameraAdd.startAnimation(fab_open);
+            galleryAdd.setVisibility(View.VISIBLE);
+            cameraAdd.setVisibility(View.VISIBLE);
+            galleryAdd.setClickable(true);
+            cameraAdd.setClickable(true);
+            isFabOpen = true;
+        }
+    }
+
+    private void requestRequiredPermissions() {
+        boolean allGranted = true;
+        for (String permission : GalleryFragment.requiredPermissions) {
+            boolean granted = ActivityCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED;
+            allGranted = allGranted & granted;
+        }
+
+        if (!allGranted)
+            requestPermissions(requiredPermissions, PERMISSIONS_REQUEST_ALL);
     }
 
     private void requestGalleryPermission() {
@@ -87,17 +152,46 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
-                if (data.getClipData() != null)
-                    sendImagesToServer(data, false);
-                else if (data.getData() != null)
-                    sendImagesToServer(data, true);
-            }
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+            if (data.getClipData() != null)
+                sendImagesToServer(data, false);
+            else if (data.getData() != null)
+                sendImagesToServer(data, true);
+        } else if (requestCode == PICTURE_RESULT) {
+            sendTakenPhotoToServer();
         }
     }
 
-    public byte[] getBytes(InputStream inputStream) throws IOException {
+    private void sendTakenPhotoToServer() {
+        RequestBody formBody = addImageFromUri(
+                new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("id", getActivity().getIntent().getStringExtra("USER_ID")),
+                currentImageUri)
+                .build();
+        Request request = new Request.Builder()
+                .url(String.format("%s/api/images/upload", Constants.SERVER_IP))
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String jsonString = response.body().string();
+                adapter.fetchPhotos(getActivity().getIntent().getStringExtra("USER_ID"));
+            }
+        });
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
@@ -115,8 +209,9 @@ public class GalleryFragment extends Fragment {
             InputStream in = getActivity().getContentResolver().openInputStream(uri);
             byteArray = getBytes(in);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("GalleryFragment", Log.getStackTraceString(e));
         }
+
         return builder.addFormDataPart(
                 "photos",
                 getFileName(uri),
@@ -176,5 +271,26 @@ public class GalleryFragment extends Fragment {
                 result = result.substring(cut + 1);
         }
         return result;
+    }
+
+    private void launchGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGE_MULTIPLE);
+    }
+
+    private void launchCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, timeStamp);
+        values.put(MediaStore.Images.Media.DESCRIPTION, timeStamp);
+        currentImageUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, currentImageUri);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null)
+            startActivityForResult(intent, PICTURE_RESULT);
     }
 }
