@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.godutch.R;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RegisterDialog extends AppCompatDialogFragment {
     private EditText accountNumber;
