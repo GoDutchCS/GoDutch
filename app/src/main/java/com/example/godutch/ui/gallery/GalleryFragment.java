@@ -12,15 +12,16 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,6 +32,8 @@ import com.example.godutch.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +56,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     private final OkHttpClient client = new OkHttpClient();
     private ImageGalleryAdapter adapter;
     private Animation fab_open, fab_close;
+    private RecyclerView recyclerView;
     private Uri currentImageUri;
     private boolean isFabOpen = false;
     protected boolean deleteMode = false;
@@ -66,13 +70,14 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     private static int PERMISSIONS_REQUEST_ALL = 8;
     private static int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 9;
     private static int PERMISSIONS_REQUEST_IMAGE_CAPTURE = 10;
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getContext(), 3);
-        RecyclerView recyclerView = root.findViewById(R.id.gallery);
+        recyclerView = root.findViewById(R.id.gallery);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -107,15 +112,78 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             launchCamera();
         } else if (id == R.id.add_options) {
             if (deleteMode) {
-                for (Integer photoIndex : adapter.selectedPhotos) {
-                }
+                deletePhotosFromServer();
             } else {
                 animate();
-                options.animate().rotation(isFabOpen ? 135 : 0)
-                        .setInterpolator(new LinearInterpolator())
-                        .setDuration(300);
             }
         }
+    }
+
+    private void deletePhotosFromServer() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), "Deleting...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        deleteMode = false;
+        if (adapter.selectedPhotos.size() == 0) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "No Items Selected", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
+
+        String photos = "[\n";
+        int count = 0;
+        for (Integer photoIndex : adapter.selectedPhotos) {
+            ((ImageGalleryAdapter.MyViewHolder) recyclerView.findViewHolderForAdapterPosition(photoIndex)).removeBorder();
+            photos += String.format("\"%s\"", adapter.photos.get(photoIndex));
+            count += 1;
+            if (count != adapter.selectedPhotos.size())
+                photos += ",\n";
+            else
+                photos += "\n]";
+        }
+
+        String postBody = "{\n" +
+                "\"photos\": " + photos + ",\n" +
+                "\"id\": \"" + getActivity().getIntent().getStringExtra("USER_ID") + "\"\n}";
+        Log.v("Foo", postBody);
+        RequestBody body = RequestBody.create(postBody, JSON);
+        Request request = new Request.Builder()
+                .url(String.format("%s/api/images/delete", Constants.SERVER_IP))
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String jsonString = response.body().string();
+                try {
+                    JSONObject jsonData = new JSONObject(jsonString);
+                    adapter.fetchPhotos(jsonData.getJSONArray("photos"));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (JSONException e) {
+                    Log.e("GalleryFragment", Log.getStackTraceString(e));
+                }
+            }
+        });
+
+        setPlusIcon();
     }
 
     private void animate() {
@@ -126,6 +194,9 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             cameraAdd.setVisibility(View.GONE);
             galleryAdd.setClickable(false);
             cameraAdd.setClickable(false);
+            options.animate().rotation(0)
+                    .setInterpolator(new LinearInterpolator())
+                    .setDuration(300);
             isFabOpen = false;
         } else {
             galleryAdd.startAnimation(fab_open);
@@ -134,6 +205,9 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             cameraAdd.setVisibility(View.VISIBLE);
             galleryAdd.setClickable(true);
             cameraAdd.setClickable(true);
+            options.animate().rotation(135)
+                    .setInterpolator(new LinearInterpolator())
+                    .setDuration(300);
             isFabOpen = true;
         }
     }
@@ -224,6 +298,12 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     }
 
     private void sendImagesToServer(Intent data, boolean single) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), "Uploading...", Toast.LENGTH_SHORT).show();
+            }
+        });
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("id", getActivity().getIntent().getStringExtra("USER_ID"));
@@ -253,6 +333,12 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
                 adapter.fetchPhotos(getActivity().getIntent().getStringExtra("USER_ID"));
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Uploaded!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -296,5 +382,20 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, currentImageUri);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null)
             startActivityForResult(intent, PICTURE_RESULT);
+    }
+
+    protected void setTrashCanIcon() {
+        if (isFabOpen) {
+            animate();
+            isFabOpen = !isFabOpen;
+        }
+
+        options.setImageResource(R.drawable.ic_baseline_delete_forever_24);
+        options.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.colorError));
+    }
+
+    protected void setPlusIcon() {
+        options.setImageResource(R.drawable.ic_baseline_add_24);
+        options.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.colorAccent));
     }
 }

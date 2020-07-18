@@ -76,8 +76,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
         @Override
         public boolean onLongClick(View view) {
-            fragment.options.setImageResource(R.drawable.ic_baseline_delete_forever_24);
-            fragment.options.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorError));
+            fragment.setTrashCanIcon();
             setBorder();
             ImageGalleryAdapter.this.fragment.deleteMode = !ImageGalleryAdapter.this.fragment.deleteMode;
             this.selected = true;
