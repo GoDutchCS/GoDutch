@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,7 +159,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                             }
                             notifyDataSetChanged();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("ImageGalleryAdapter", Log.getStackTraceString(e));
                         }
                     }
                 });
@@ -166,5 +167,26 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         });
     }
 
+    protected void fetchPhotos(final JSONArray photos) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                ImageGalleryAdapter.this.photos = new ArrayList<>(photos.length());
+                for (int i = 0; i < photos.length(); i++) {
+                    try {
+                        ImageGalleryAdapter.this.photos.add(
+                                new GoDutchPhoto(
+                                        String.format("%s/%s", Constants.SERVER_IP, photos.getString(i)),
+                                        "test"
+                                )
+                        );
+                    } catch (JSONException e) {
+                        Log.e("ImageGalleryAdapter", Log.getStackTraceString(e));
+                    }
+                }
 
+                notifyDataSetChanged();
+            }
+        });
+    }
 }
