@@ -120,13 +120,8 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     }
 
     private void deletePhotosFromServer() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getActivity(), "Deleting...", Toast.LENGTH_SHORT).show();
-            }
-        });
         deleteMode = false;
+        setPlusIcon();
         if (adapter.selectedPhotos.size() == 0) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -136,6 +131,13 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             });
             return;
         }
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), "Deleting...", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         String photos = "[\n";
         int count = 0;
@@ -182,8 +184,6 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-
-        setPlusIcon();
     }
 
     private void animate() {
