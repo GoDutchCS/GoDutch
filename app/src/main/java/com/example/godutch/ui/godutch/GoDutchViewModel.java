@@ -10,7 +10,6 @@ public class GoDutchViewModel extends ViewModel {
 
     public GoDutchViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {
