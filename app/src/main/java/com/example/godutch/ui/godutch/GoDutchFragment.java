@@ -1,4 +1,4 @@
-package com.example.godutch.ui.dashboard;
+package com.example.godutch.ui.godutch;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.godutch.R;
 
-public class DashboardFragment extends Fragment {
+public class GoDutchFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private GoDutchViewModel goDutchViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        goDutchViewModel =
+                ViewModelProviders.of(this).get(GoDutchViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_godutch, container, false);
+        final TextView textView = root.findViewById(R.id.text_godutch);
+        goDutchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
