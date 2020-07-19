@@ -53,6 +53,14 @@ public class NewPartyActivity extends AppCompatActivity {
 
         userID = getIntent().getStringExtra("USER_ID");
         cancel = findViewById(R.id.new_party_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
+            }
+        });
         confirm = findViewById(R.id.new_party_confirm);
         confirm.setEnabled(false);
         confirm.setBackgroundTintList(ContextCompat.getColorStateList(NewPartyActivity.this, R.color.material_grey));
