@@ -20,6 +20,7 @@
         android:layout_marginBottom="160dp"
         android:layout_marginRight="@dimen/fab_margin_right"
         android:backgroundTint="@color/colorPrimaryDark"
+        app:tint="@android:color/white"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
@@ -34,6 +35,7 @@
         android:layout_marginBottom="90dp"
         android:layout_marginRight="@dimen/fab_margin_right"
         android:backgroundTint="@color/colorPrimaryDark"
+        app:tint="@android:color/white"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
@@ -46,6 +48,7 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin_right"
+        app:tint="@android:color/white"
         app:borderWidth="0dp"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
