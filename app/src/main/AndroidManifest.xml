@@ -37,6 +37,7 @@
             android:label="@string/app_name">
         </activity>
         <activity android:name=".ui.gallery.GoDutchPhotoActivity"></activity>
+        <activity android:name=".ui.godutch.NewPartyActivity"></activity>
     </application>
 
 </manifest>
