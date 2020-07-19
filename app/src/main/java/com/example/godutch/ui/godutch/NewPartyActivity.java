@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.godutch.Constants;
@@ -121,7 +120,7 @@ public class NewPartyActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final NPViewHolder holder, final int position) {
             JSONObject item = users.get(position);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     holder.selected = !holder.selected;
@@ -140,7 +139,10 @@ public class NewPartyActivity extends AppCompatActivity {
                         }
                     }
                 }
-            });
+            };
+
+            holder.itemView.setOnClickListener(listener);
+            holder.selectButton.setOnClickListener(listener);
             try {
                 Glide.with(NewPartyActivity.this)
                         .load(String.format("graph.facebook.com/%s/picture?type=small", item.getString("id")))
