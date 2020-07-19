@@ -3,6 +3,7 @@ package com.example.godutch.ui.godutch;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.godutch.Constants;
+import com.example.godutch.MainActivity;
 import com.example.godutch.R;
+import com.example.godutch.ui.godutch.party.GoDutchPartyFragment;
 import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +92,12 @@ public class GoDutchMainFragment extends Fragment {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     final String jsonString = response.body().string();
-                    Log.v("Foo", jsonString);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((MainActivity)getActivity()).getViewPager().setCurrentItem(1);
+                        }
+                    });
                 }
             });
         }

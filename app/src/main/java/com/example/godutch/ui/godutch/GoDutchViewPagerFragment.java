@@ -23,7 +23,7 @@ public class GoDutchViewPagerFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_screen_slide, container, false);
 
         pagerAdapter = new GoDutchViewPagerAdapter(getActivity());
-        viewPager = root.findViewById(R.id.game_pager);
+        viewPager = root.findViewById(R.id.godutch_pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(new ZoomOutPageTransformer());
 
