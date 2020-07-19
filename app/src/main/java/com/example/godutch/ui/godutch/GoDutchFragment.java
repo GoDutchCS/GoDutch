@@ -13,14 +13,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.godutch.Constants;
 import com.example.godutch.R;
 import com.google.android.material.button.MaterialButton;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 public class GoDutchFragment extends Fragment {
+    private static int REQUEST_NEW_PARTY_DIALOG = 1;
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private GoDutchViewModel goDutchViewModel;
     private MaterialButton partyGenButton;
-    private static int REQUEST_NEW_PARTY_DIALOG = 1;
+    private OkHttpClient client = new OkHttpClient();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +74,26 @@ public class GoDutchFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_NEW_PARTY_DIALOG && resultCode == Activity.RESULT_OK)  {
+            String postBody = data.getStringExtra("party");
+            Log.v("Foo", postBody);
+            RequestBody body = RequestBody.create(postBody, JSON);
+            Request request = new Request.Builder()
+                    .url(String.format("%s/api/parties/add", Constants.SERVER_IP))
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    call.cancel();
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    final String jsonString = response.body().string();
+                    Log.v("Foo", jsonString);
+                }
+            });
         }
     }
 }

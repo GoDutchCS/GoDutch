@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.godutch.Constants;
 import com.example.godutch.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -43,6 +44,7 @@ public class NewPartyActivity extends AppCompatActivity {
     private String userID;
     private NewPartyAdapter adapter;
     private MaterialButton cancel, confirm;
+    private TextInputEditText partyName;
     private OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -51,6 +53,7 @@ public class NewPartyActivity extends AppCompatActivity {
         setContentView(R.layout.godutch_generate_party);
 
         userID = getIntent().getStringExtra("USER_ID");
+        partyName = findViewById(R.id.party_name);
         cancel = findViewById(R.id.new_party_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,23 +197,23 @@ public class NewPartyActivity extends AppCompatActivity {
         }
 
         public String generatePartyString() {
-            String body = "[ \"" + userID + "\",";
+            String members = "[ \"" + userID + "\",";
 
             int count = 0;
             for (Integer index : selectedUsers) {
                 try {
-                    body += String.format("\"%s\"", users.get(index).getString("id"));
+                    members += String.format("\"%s\"", users.get(index).getString("id"));
                     count += 1;
                     if (count == selectedUsers.size())
-                        body += " ]";
+                        members += " ]";
                     else
-                        body += ",";
+                        members += ",";
                 } catch (JSONException e) {
                     Log.e("NewPartyActivity", Log.getStackTraceString(e));
                 }
             }
 
-            return body;
+            return String.format("{ \"id\": \"%s\", \"members\": %s }", partyName.getText(), members);
         }
     }
 }
