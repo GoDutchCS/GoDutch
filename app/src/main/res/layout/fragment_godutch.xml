@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/godutch_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.godutch.GoDutchFragment"
+    tools:context=".ui.godutch.GoDutchMainFragment"
     android:orientation="vertical"
     android:weightSum="4"
     >

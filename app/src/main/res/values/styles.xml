@@ -10,4 +10,7 @@
     <style name="MyActionBar" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:background">#fff</item>
     </style>
+    <style name="ScreenSlideTabText">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

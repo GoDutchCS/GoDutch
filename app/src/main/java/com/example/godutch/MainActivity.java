@@ -14,8 +14,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class MainActivity extends AppCompatActivity {
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +58,12 @@ public class MainActivity extends AppCompatActivity {
         }
         startActivity(new Intent(MainActivity.this, FacebookActivity.class));
         finish();
+    }
+
+    public ViewPager2 getViewPager() {
+        if (viewPager == null)
+            viewPager = (ViewPager2) findViewById(R.id.godutch_pager);
+
+        return viewPager;
     }
 }
