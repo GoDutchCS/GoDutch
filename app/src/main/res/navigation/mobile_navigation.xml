@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_godutch"
-        android:name="com.example.godutch.ui.godutch.GoDutchFragment"
+        android:name="com.example.godutch.ui.godutch.GoDutchViewPagerFragment"
         android:label="@string/title_godutch"
         tools:layout="@layout/fragment_godutch" />
 

@@ -18,8 +18,6 @@ import com.example.godutch.R;
 import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -32,7 +30,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class GoDutchFragment extends Fragment {
+public class GoDutchMainFragment extends Fragment {
     private static int REQUEST_NEW_PARTY_DIALOG = 1;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private GoDutchViewModel goDutchViewModel;
