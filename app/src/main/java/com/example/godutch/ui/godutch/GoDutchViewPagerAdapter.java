@@ -5,13 +5,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.godutch.ui.godutch.party.GoDutchPartyFragment;
+
 public class GoDutchViewPagerAdapter extends FragmentStateAdapter {
     private final Fragment[] fragments = new Fragment[] {
-            new GoDutchMainFragment()
+            new GoDutchMainFragment(),
+            new GoDutchPartyFragment()
     };
 
     private final String[] fragmentNames = new String[] {
-            "Home"
+            "Home",
+            "Parties"
     };
 
     public GoDutchViewPagerAdapter(FragmentActivity fa) {
