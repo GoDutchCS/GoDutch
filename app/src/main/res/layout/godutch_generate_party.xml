@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
