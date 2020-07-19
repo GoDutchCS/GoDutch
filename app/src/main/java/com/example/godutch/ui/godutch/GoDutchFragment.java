@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import com.google.android.material.button.MaterialButton;
 public class GoDutchFragment extends Fragment {
     private GoDutchViewModel goDutchViewModel;
     private MaterialButton partyGenButton;
-    private Bundle bundle;
     private static int REQUEST_NEW_PARTY_DIALOG = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,

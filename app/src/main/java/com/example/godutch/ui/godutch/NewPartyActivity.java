@@ -1,33 +1,50 @@
 package com.example.godutch.ui.godutch;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
+import com.example.godutch.Constants;
 import com.example.godutch.R;
 import com.google.android.material.button.MaterialButton;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class NewPartyActivity extends AppCompatActivity {
     private RecyclerView members;
     private String userID;
     private NewPartyAdapter adapter;
     private MaterialButton cancel, confirm;
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,10 +54,14 @@ public class NewPartyActivity extends AppCompatActivity {
         userID = getIntent().getStringExtra("USER_ID");
         cancel = findViewById(R.id.new_party_cancel);
         confirm = findViewById(R.id.new_party_confirm);
+        confirm.setEnabled(false);
+        confirm.setBackgroundTintList(ContextCompat.getColorStateList(NewPartyActivity.this, R.color.material_grey));
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String body = adapter.generatePartyString();
                 Intent intent = new Intent();
+                intent.putExtra("party", body);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -58,42 +79,128 @@ public class NewPartyActivity extends AppCompatActivity {
     public class NewPartyAdapter extends RecyclerView.Adapter<NewPartyAdapter.NPViewHolder> {
         private String userID;
         private ArrayList<JSONObject> users;
+        private HashSet<Integer> selectedUsers;
 
         public class NPViewHolder extends RecyclerView.ViewHolder {
             public ImageView profile;
             public TextView number;
             public TextView name;
+            public ImageButton selectButton;
+            public boolean selected = false;
 
             public NPViewHolder(View itemView) {
                 super(itemView);
                 profile = itemView.findViewById(R.id.profile_photo);
                 number = itemView.findViewById(R.id.profile_number);
                 name = itemView.findViewById(R.id.profile_name);
+                selectButton = itemView.findViewById(R.id.profile_select);
             }
         }
 
         public NewPartyAdapter(String userID) {
             this.userID = userID;
+            this.selectedUsers = new HashSet<>();
+            fetchUsers();
         }
 
         @NonNull
         @Override
         public NPViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return null;
+            View photoView = LayoutInflater.from(parent.getContext()).inflate(R.layout.godutch_contact_row, parent, false);
+            return new NewPartyAdapter.NPViewHolder(photoView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull NPViewHolder holder, int position) {
-
+        public void onBindViewHolder(@NonNull final NPViewHolder holder, final int position) {
+            JSONObject item = users.get(position);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.selected = !holder.selected;
+                    holder.selectButton.setImageResource(holder.selected ? R.drawable.ic_baseline_radio_button_checked_28 : R.drawable.ic_baseline_radio_button_unchecked_28);
+                    if (holder.selected) {
+                        selectedUsers.add(position);
+                        if (selectedUsers.size() == 1) {
+                            confirm.setBackgroundTintList(ContextCompat.getColorStateList(NewPartyActivity.this, R.color.material_blue));
+                            confirm.setEnabled(true);
+                        }
+                    } else {
+                        selectedUsers.remove(position);
+                        if (selectedUsers.size() == 0) {
+                            confirm.setBackgroundTintList(ContextCompat.getColorStateList(NewPartyActivity.this, R.color.material_grey));
+                            confirm.setEnabled(false);
+                        }
+                    }
+                }
+            });
+            try {
+                Glide.with(NewPartyActivity.this)
+                        .load(String.format("graph.facebook.com/%s/picture?type=small", item.getString("id")))
+                        .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
+                        .into(holder.profile);
+                holder.number.setText(item.getString("number"));
+                holder.name.setText(item.getString("name"));
+            } catch (JSONException e) {
+                Log.e("NewPartyActivity", Log.getStackTraceString(e));
+            }
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return users == null ? 0 : users.size();
         }
 
         public void fetchUsers() {
+            Request request = new Request.Builder()
+                    .url(String.format("%s/api/users/list/%s", Constants.SERVER_IP, userID))
+                    .build();
 
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    call.cancel();
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    final String jsonString = response.body().string();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        public void run() {
+                            try {
+                                JSONObject data = new JSONObject(jsonString);
+                                JSONArray result = data.getJSONArray("result");
+                                NewPartyAdapter.this.users = new ArrayList<>(result.length());
+                                for (int i = 0; i < result.length(); i++) {
+                                    NewPartyAdapter.this.users.add(result.getJSONObject(i));
+                                }
+                                notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                Log.e("ImageGalleryAdapter", Log.getStackTraceString(e));
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        public String generatePartyString() {
+            String body = "[ \"" + userID + "\",";
+
+            int count = 0;
+            for (Integer index : selectedUsers) {
+                try {
+                    body += String.format("\"%s\"", users.get(index).getString("id"));
+                    count += 1;
+                    if (count == selectedUsers.size())
+                        body += " ]";
+                    else
+                        body += ",";
+                } catch (JSONException e) {
+                    Log.e("NewPartyActivity", Log.getStackTraceString(e));
+                }
+            }
+
+            return body;
         }
     }
 }

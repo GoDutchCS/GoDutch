@@ -154,7 +154,6 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         String postBody = "{\n" +
                 "\"photos\": " + photos + ",\n" +
                 "\"id\": \"" + getActivity().getIntent().getStringExtra("USER_ID") + "\"\n}";
-        Log.v("Foo", postBody);
         RequestBody body = RequestBody.create(postBody, JSON);
         Request request = new Request.Builder()
                 .url(String.format("%s/api/images/delete", Constants.SERVER_IP))
