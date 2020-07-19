@@ -23,12 +23,13 @@
     </com.google.android.material.textfield.TextInputLayout>
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="15dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:orientation="vertical"
+        android:layout_weight="1"
         >
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
@@ -39,54 +40,54 @@
             />
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="10dp"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/party_members"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="9"
-        android:layout_marginTop="10dp"
-        >
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/new_party_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="취소 "
-            android:textSize="15dp"
-            android:backgroundTint="#9e9e9e"
-            />
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/new_party_confirm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:text="만들기"
-            android:textColor="@android:color/white"
-            android:textSize="15dp"
-            android:backgroundTint="@color/materialBlue"
-            />
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:weightSum="9"
+            android:layout_marginTop="10dp"
+            >
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/new_party_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="취소 "
+                android:textSize="15dp"
+                android:backgroundTint="#9e9e9e"
+                />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/new_party_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="만들기"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:backgroundTint="@color/material_blue"
+                />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

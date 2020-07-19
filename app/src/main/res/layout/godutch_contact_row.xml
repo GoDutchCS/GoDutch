@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
+    android:background="@drawable/custom_ripple"
     >
     <ImageView
         android:id="@+id/profile_photo"
@@ -33,4 +34,12 @@
             android:layout_weight="1"
             />
     </LinearLayout>
+    <ImageButton
+        android:id="@+id/profile_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_radio_button_unchecked_28"
+        android:background="@null"
+        />
 </LinearLayout>
