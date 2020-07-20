@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="Transaction Name"
             android:textColor="@color/material_text"
-            android:textSize="18sp"
+            android:textSize="22sp"
             />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/godutch_transaction_amount"
@@ -30,8 +30,7 @@
             android:layout_height="wrap_content"
             android:text="30000원"
             android:textColor="#5e5e5e"
-            android:gravity="right"
-            android:textSize="15sp"
+            android:textSize="18sp"
             />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
