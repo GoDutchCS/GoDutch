@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/custom_ripple"
+    >
+    <ImageView
+        android:id="@+id/member_photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/member_name"
+        android:text="Member Name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        />
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/member_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        />
+</LinearLayout>

@@ -3,7 +3,6 @@ package com.example.godutch.ui.godutch;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.godutch.Constants;
 import com.example.godutch.MainActivity;
 import com.example.godutch.R;
-import com.example.godutch.ui.godutch.party.GoDutchPartyFragment;
 import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +32,7 @@ import okhttp3.Response;
 
 
 public class GoDutchMainFragment extends Fragment {
-    private static int REQUEST_NEW_PARTY_DIALOG = 1;
+    private static int REQUEST_NEW_PARTY_ACTIVITY = 1;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private GoDutchViewModel goDutchViewModel;
     private MaterialButton partyGenButton;
@@ -48,7 +46,7 @@ public class GoDutchMainFragment extends Fragment {
         partyGenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchNewPartyDialog();
+                launchNewPartyActivity();
             }
         });
         return root;
@@ -66,17 +64,16 @@ public class GoDutchMainFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
-    public void launchNewPartyDialog() {
+    public void launchNewPartyActivity() {
         Intent intent = new Intent(getActivity(), NewPartyActivity.class);
         intent.putExtra("USER_ID", getActivity().getIntent().getStringExtra("USER_ID"));
-        startActivityForResult(intent, REQUEST_NEW_PARTY_DIALOG);
+        startActivityForResult(intent, REQUEST_NEW_PARTY_ACTIVITY);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_NEW_PARTY_DIALOG && resultCode == Activity.RESULT_OK)  {
+        if (requestCode == REQUEST_NEW_PARTY_ACTIVITY && resultCode == Activity.RESULT_OK)  {
             String postBody = data.getStringExtra("party");
-            Log.v("Foo", postBody);
             RequestBody body = RequestBody.create(postBody, JSON);
             Request request = new Request.Builder()
                     .url(String.format("%s/api/parties/add", Constants.SERVER_IP))

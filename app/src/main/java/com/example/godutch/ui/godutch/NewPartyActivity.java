@@ -148,7 +148,7 @@ public class NewPartyActivity extends AppCompatActivity {
             holder.selectButton.setOnClickListener(listener);
             try {
                 Glide.with(NewPartyActivity.this)
-                        .load(String.format("https://graph.facebook.com/%s/picture?type=small", item.getString("id")))
+                        .load(String.format("https://graph.facebook.com/%s/picture?type=large", item.getString("id")))
                         .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
                         .into(holder.profile);
                 holder.number.setText(item.getString("number"));

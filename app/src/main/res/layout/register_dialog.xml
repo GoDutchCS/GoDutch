@@ -57,7 +57,7 @@
             android:text="Register"
             android:layout_weight="2"
             android:textColor="@android:color/white"
-            android:backgroundTint="#536dfe"
+            android:backgroundTint="@color/material_blue"
             />
         <Space
             android:layout_width="0dp"

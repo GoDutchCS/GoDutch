@@ -6,4 +6,5 @@
     <color name="colorError">#FF1744</color>
     <color name="material_blue">#536DFE</color>
     <color name="material_grey">#9E9E9E</color>
+    <color name="material_text">#2b2b2b</color>
 </resources>

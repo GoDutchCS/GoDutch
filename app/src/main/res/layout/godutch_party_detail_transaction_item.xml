@@ -3,38 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:layout_marginBottom="8dp"
     android:backgroundTint="#fdfdfd"
+    app:cardCornerRadius="15dp"
     app:cardElevation="1dp"
-    app:cardCornerRadius="10dp"
     >
     <LinearLayout
-        android:id="@+id/party_row"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:clickable="true"
-        android:background="@drawable/custom_ripple"
         >
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/party_id"
+            android:id="@+id/godutch_transaction_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="test"
-            android:textSize="20dp"
-            android:textColor="#383838"
+            android:text="Transaction Name"
+            android:textColor="@color/material_text"
+            android:textSize="18sp"
             />
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/party_members_list"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/godutch_transaction_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:text="30000원"
+            android:textColor="#5e5e5e"
+            android:gravity="right"
+            android:textSize="15sp"
             />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
