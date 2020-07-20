@@ -65,37 +65,4 @@ public class GoDutchPartyRowAdapter extends RecyclerView.Adapter<GoDutchPartyRow
     public int getItemCount() {
         return partyMembers == null ? 0 : partyMembers.length();
     }
-
-//    public void fetchPartyMembers() {
-//        Request request = new Request.Builder()
-//                .url(String.format("%s/api/parties/list/%s", Constants.SERVER_IP, userID))
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                call.cancel();
-//            }
-//
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                final String jsonString = response.body().string();
-//                new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                    public void run() {
-//                        try {
-//                            JSONArray result = new JSONArray(jsonString);
-//                            GoDutchPartyRowAdapter.this.partyMembers = new ArrayList<>(result.length());
-//                            for (int i = 0; i < result.length(); i++) {
-//                                GoDutchPartyRowAdapter.this.partyMembers.add(result.getJSONObject(i));
-//                            }
-//                            notifyDataSetChanged();
-//                        } catch (JSONException e) {
-//                            Log.e("GoDutchPartyRowAdapter", Log.getStackTraceString(e));
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//    }
-
 }
