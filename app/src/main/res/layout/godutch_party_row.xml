@@ -4,18 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="15dp"
-    android:backgroundTint="#fcfcfc"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="8dp"
+    android:backgroundTint="#fdfdfd"
     app:cardElevation="1dp"
     app:cardCornerRadius="10dp"
     >
     <LinearLayout
+        android:id="@+id/party_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
+        android:clickable="true"
+        android:background="@drawable/custom_ripple"
         >
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/party_id"

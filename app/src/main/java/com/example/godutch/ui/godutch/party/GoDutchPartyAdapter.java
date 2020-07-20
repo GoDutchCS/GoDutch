@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,11 +41,13 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
     public class GoDutchPartyViewHolder extends RecyclerView.ViewHolder {
         public RecyclerView partyMembers;
         public MaterialTextView partyName;
+        public LinearLayout list;
 
         public GoDutchPartyViewHolder(View itemView) {
             super(itemView);
             partyMembers = itemView.findViewById(R.id.party_members_list);
             partyName = itemView.findViewById(R.id.party_id);
+            list = itemView.findViewById(R.id.party_row);
         }
     }
 
@@ -82,7 +85,7 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
         holder.partyMembers.setAdapter(adapter);
 
         final String intentPartyID = partyID;
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(fragment.getActivity(), PartyDetailActivity.class);
