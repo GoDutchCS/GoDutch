@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class PhoneBookAdapter extends RecyclerView.Adapter<PhoneBookAdapter.Phon
             email.setText(item.getEmail());
             photo.setImageURI(item.getPhoto());
             if (photo.getDrawable() == null)
-                photo.setImageResource(R.drawable.poongyeong);
+                photo.setImageResource(R.drawable.no_picture);
 
 //            callButton.setOnClickListener(new View.OnClickListener() {
 //                public void onClick(View v) {
@@ -124,9 +125,11 @@ public class PhoneBookAdapter extends RecyclerView.Adapter<PhoneBookAdapter.Phon
     public void fillter(String searchText, ArrayList<JsonData> backupList){
 
         listViewItemList.clear();
+        Log.d("검색 backup list", backupList.toString());
 
         for( JsonData item : backupList)
         {
+
             if(item.getName().toUpperCase().contains(searchText.toUpperCase()))
             {
                 listViewItemList.add(item);
