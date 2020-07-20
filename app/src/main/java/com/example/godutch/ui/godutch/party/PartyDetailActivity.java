@@ -81,6 +81,7 @@ public class PartyDetailActivity extends AppCompatActivity {
         public class TransactionsViewHolder extends RecyclerView.ViewHolder {
             public MaterialTextView transactionDate;
             public RecyclerView transactionList;
+            public DateTransactionsAdapter adapter;
 
             public TransactionsViewHolder(View itemView) {
                 super(itemView);
@@ -126,11 +127,26 @@ public class PartyDetailActivity extends AppCompatActivity {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.v("foo", "bar");
                     }
                 });
             } else {
-                JSONObject dateTransactions = transactions.get(position);
+                TransactionsViewHolder viewHolder = (TransactionsViewHolder) holder;
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PartyDetailActivity.this, LinearLayoutManager.VERTICAL, false);
+
+                JSONArray dateTransactions = null;
+                String date = null;
+                try {
+                    dateTransactions = transactions.get(position).getJSONArray("titles");
+                    date = transactions.get(position).getString("_id");
+                } catch (JSONException e) {
+                    Log.e("PartyDetailActivity", Log.getStackTraceString(e));
+                }
+
+                viewHolder.transactionDate.setText(date);
+                viewHolder.transactionList.setLayoutManager(layoutManager);
+                viewHolder.transactionList.setHasFixedSize(true);
+                viewHolder.adapter = new DateTransactionsAdapter(dateTransactions);
+                viewHolder.transactionList.setAdapter(viewHolder.adapter);
             }
         }
 
@@ -141,7 +157,7 @@ public class PartyDetailActivity extends AppCompatActivity {
 
         public void fetchTransactions() {
             Request request = new Request.Builder()
-                    .url(String.format("%s/api/users/list/%s", Constants.SERVER_IP, userID))
+                    .url(String.format("%s/api/parties/transactions/%s", Constants.SERVER_IP, partyID))
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -155,21 +171,61 @@ public class PartyDetailActivity extends AppCompatActivity {
                     final String jsonString = response.body().string();
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         public void run() {
-//                            try {
-//                                JSONObject data = new JSONObject(jsonString);
-//                                JSONArray result = data.getJSONArray("result");
-//                                TransactionsAdapter.this.users = new ArrayList<>(result.length());
-//                                for (int i = 0; i < result.length(); i++) {
-//                                    TransactionsAdapter.this.users.add(result.getJSONObject(i));
-//                                }
-//                                notifyDataSetChanged();
-//                            } catch (JSONException e) {
-//                                Log.e("ImageGalleryAdapter", Log.getStackTraceString(e));
-//                            }
+                            try {
+                                JSONArray array = new JSONArray(jsonString);
+                                TransactionsAdapter.this.transactions = new ArrayList<>(array.length());
+                                for (int i = 0; i < array.length(); i++) {
+                                    TransactionsAdapter.this.transactions.add(array.getJSONObject(i));
+                                }
+                                notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                Log.e("PartyDetailActivity", Log.getStackTraceString(e));
+                            }
                         }
                     });
                 }
             });
+        }
+    }
+
+    public class DateTransactionsAdapter extends RecyclerView.Adapter<DateTransactionsAdapter.DateTransactionsViewHolder> {
+        private JSONArray dateTransactions;
+
+        public class DateTransactionsViewHolder extends RecyclerView.ViewHolder {
+            MaterialTextView name;
+            MaterialTextView amount;
+
+            public DateTransactionsViewHolder(View itemView) {
+                super(itemView);
+                name = itemView.findViewById(R.id.godutch_transaction_name);
+                amount = itemView.findViewById(R.id.godutch_transaction_amount);
+            }
+        }
+
+        public DateTransactionsAdapter(JSONArray dateTransactions) {
+            this.dateTransactions = dateTransactions;
+        }
+
+        @NonNull
+        @Override
+        public DateTransactionsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View dateTransactionsView = LayoutInflater.from(parent.getContext()).inflate(R.layout.godutch_party_detail_transaction_item, parent, false);
+            return new DateTransactionsViewHolder(dateTransactionsView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull DateTransactionsViewHolder holder, int position) {
+            try {
+                holder.name.setText(dateTransactions.getString(position));
+                holder.amount.setText("30000원");
+            } catch (JSONException e) {
+                Log.e("PartyDetailActivity", Log.getStackTraceString(e));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return dateTransactions == null ? 0 : dateTransactions.length();
         }
     }
 
@@ -202,7 +258,7 @@ public class PartyDetailActivity extends AppCompatActivity {
             try {
                 memberID = partyMembers.getString(position);
             } catch (JSONException e) {
-                Log.e("GoDutchPartyRowAdapter", Log.getStackTraceString(e));
+                Log.e("PartyDetailActivity", Log.getStackTraceString(e));
             }
             Glide.with(PartyDetailActivity.this)
                     .load(String.format("https://graph.facebook.com/%s/picture?type=large", memberID))
@@ -229,7 +285,6 @@ public class PartyDetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     final String jsonString = response.body().string();
-                    Log.v("Foo", jsonString);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         public void run() {
                             try {

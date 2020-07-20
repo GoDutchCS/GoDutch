@@ -74,7 +74,6 @@ public class GoDutchMainFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_NEW_PARTY_ACTIVITY && resultCode == Activity.RESULT_OK)  {
             String postBody = data.getStringExtra("party");
-            Log.v("Foo", postBody);
             RequestBody body = RequestBody.create(postBody, JSON);
             Request request = new Request.Builder()
                     .url(String.format("%s/api/parties/add", Constants.SERVER_IP))
