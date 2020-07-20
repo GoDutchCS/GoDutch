@@ -115,7 +115,6 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
-                Log.v("Foo", jsonString);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     public void run() {
                         try {

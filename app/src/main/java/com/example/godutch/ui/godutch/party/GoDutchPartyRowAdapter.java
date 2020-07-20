@@ -54,9 +54,8 @@ public class GoDutchPartyRowAdapter extends RecyclerView.Adapter<GoDutchPartyRow
         } catch (JSONException e) {
             Log.e("GoDutchPartyRowAdapter", Log.getStackTraceString(e));
         }
-        Log.v("Foo", String.format("graph.facebook.com/%s/picture?type=small", memberID));
         Glide.with(this.context)
-                .load(String.format("https://graph.facebook.com/%s/picture?type=small", memberID))
+                .load(String.format("https://graph.facebook.com/%s/picture?type=large", memberID))
                 .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
                 .into(holder.imageView);
     }
