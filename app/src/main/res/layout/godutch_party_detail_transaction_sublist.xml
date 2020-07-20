@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/godutch_transaction_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2020-07-18"
+        android:textColor="@color/material_text"
+        android:textSize="28dp"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/godutch_transaction_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>
