@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.godutch.Constants;
 import com.example.godutch.R;
+import com.example.godutch.ui.godutch.transaction.NewTransactionDialog;
+import com.example.godutch.ui.register.RegisterDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -30,11 +33,14 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PartyDetailActivity extends AppCompatActivity {
+public class PartyDetailActivity extends AppCompatActivity implements NewTransactionDialog.NewTransactionDialogListener {
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private RecyclerView transactions, members;
     private String userID;
     private String partyID;
@@ -74,6 +80,50 @@ public class PartyDetailActivity extends AppCompatActivity {
         transactions.setAdapter(transactionsAdapter);
     }
 
+    public void launchNewTransactionDialog() {
+        NewTransactionDialog newTransactionDialog = new NewTransactionDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("PARTY_MEMBERS", this.membersAdapter.getPartyMembers());
+        newTransactionDialog.setArguments(bundle);
+        newTransactionDialog.show(getSupportFragmentManager(), "New Transaction");
+    }
+
+    @Override
+    public void createTransaction(String title, String buyer, String total, String method, String participants) {
+        String postBody = "{\n" +
+                "\"title\": " + "\"" + title + "\",\n" +
+                "\"buyer\": " + "\"" + buyer + "\",\n" +
+                "\"total\": " + total + ",\n" +
+                "\"method\": " + "\"" + method + "\",\n" +
+                "\"participants\": " + participants + "\n}";
+        RequestBody body = RequestBody.create(postBody, JSON);
+        Request request = new Request.Builder()
+                .url(String.format("%s/api/parties/%s/transactions/add", Constants.SERVER_IP, partyID))
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String jsonString = response.body().string();
+                if (jsonString.indexOf("true") >= 0) {
+                    PartyDetailActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(PartyDetailActivity.this, "Transaction Added", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    transactionsAdapter.fetchTransactions();
+                }
+            }
+        });
+    }
+
     public class TransactionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private String userID;
         private ArrayList<JSONObject> transactions;
@@ -99,7 +149,11 @@ public class PartyDetailActivity extends AppCompatActivity {
         public TransactionsAdapter(String userID) {
             this.userID = userID;
             transactions = new ArrayList<>();
-            transactions.add(null);
+            try {
+                transactions.add(new JSONObject("{}"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             fetchTransactions();
         }
 
@@ -127,6 +181,7 @@ public class PartyDetailActivity extends AppCompatActivity {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        launchNewTransactionDialog();
                     }
                 });
             } else {
@@ -136,12 +191,11 @@ public class PartyDetailActivity extends AppCompatActivity {
                 JSONArray dateTransactions = null;
                 String date = null;
                 try {
-                    dateTransactions = transactions.get(position).getJSONArray("titles");
+                    dateTransactions = transactions.get(position).getJSONArray("transactions");
                     date = transactions.get(position).getString("_id");
                 } catch (JSONException e) {
                     Log.e("PartyDetailActivity", Log.getStackTraceString(e));
                 }
-
                 viewHolder.transactionDate.setText(date);
                 viewHolder.transactionList.setLayoutManager(layoutManager);
                 viewHolder.transactionList.setHasFixedSize(true);
@@ -172,8 +226,11 @@ public class PartyDetailActivity extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         public void run() {
                             try {
+                                if (TransactionsAdapter.this.transactions.size() != 1) {
+                                    TransactionsAdapter.this.transactions.clear();
+                                    TransactionsAdapter.this.transactions.add(null);
+                                }
                                 JSONArray array = new JSONArray(jsonString);
-                                TransactionsAdapter.this.transactions = new ArrayList<>(array.length());
                                 for (int i = 0; i < array.length(); i++) {
                                     TransactionsAdapter.this.transactions.add(array.getJSONObject(i));
                                 }
@@ -216,8 +273,9 @@ public class PartyDetailActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull DateTransactionsViewHolder holder, int position) {
             try {
-                holder.name.setText(dateTransactions.getString(position));
-                holder.amount.setText("30000원");
+                JSONObject object = dateTransactions.getJSONObject(position);
+                holder.name.setText(object.getString("title"));
+                holder.amount.setText(object.getString("total") + "₩");
             } catch (JSONException e) {
                 Log.e("PartyDetailActivity", Log.getStackTraceString(e));
             }
@@ -243,6 +301,10 @@ public class PartyDetailActivity extends AppCompatActivity {
 
         public MembersAdapter() {
             fetchMembers();
+        }
+
+        public String getPartyMembers() {
+            return this.partyMembers.toString();
         }
 
         @NonNull
