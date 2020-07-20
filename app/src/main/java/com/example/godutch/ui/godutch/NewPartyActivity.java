@@ -188,7 +188,7 @@ public class NewPartyActivity extends AppCompatActivity {
                                 }
                                 notifyDataSetChanged();
                             } catch (JSONException e) {
-                                Log.e("ImageGalleryAdapter", Log.getStackTraceString(e));
+                                Log.e("NewPartyActivity", Log.getStackTraceString(e));
                             }
                         }
                     });
