@@ -1,5 +1,7 @@
 package com.example.godutch.ui.godutch.party;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -40,6 +42,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PartyDetailActivity extends AppCompatActivity implements NewTransactionDialog.NewTransactionDialogListener {
+    private static final int REQUEST_PARTY_RESOLVED_ACTIVITY = 1;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private RecyclerView transactions, members;
     private String userID;
@@ -61,8 +64,14 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
         partyName.setText(partyID);
 
         jeongsan = findViewById(R.id.party_detail_jeongsan);
-//        confirm.setEnabled(false);
-//        confirm.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.material_grey));
+        jeongsan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PartyDetailActivity.this, PartyResolvedActivity.class);
+                intent.putExtra("PARTY_ID", partyID);
+                startActivityForResult(intent, REQUEST_PARTY_RESOLVED_ACTIVITY);
+            }
+        });
 
         RecyclerView.LayoutManager tLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
