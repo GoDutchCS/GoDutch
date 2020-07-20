@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,17 +14,35 @@
         >
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:hint="Transaction Title"
+            android:background="@android:color/transparent"
+            app:boxBackgroundColor="@android:color/transparent"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/godutch_new_transaction_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:hint="Amount(₩)"
+            android:background="@android:color/transparent"
+            app:boxBackgroundColor="@android:color/transparent"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/godutch_new_transaction_amount"
                 android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -41,35 +60,36 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:background="@android:color/transparent"
+            android:hint="Buyer"
+            app:boxBackgroundColor="@android:color/transparent"
             >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/godutch_new_transaction_buyer"
+            <AutoCompleteTextView
+                android:id="@+id/godutch_members_dropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Buyer"
-                android:inputType="number"
+                android:textColor="@android:color/black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <RadioGroup
             android:id="@+id/godutch_new_transaction_radio_group"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             >
             <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/n_bread_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="N-Bread"
                 />
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                />
             <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:id="@+id/manual_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Manual"
                 />
         </RadioGroup>
@@ -82,13 +102,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Members"
-        android:textSize="25dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:textColor="@color/material_text"
+        android:paddingLeft="10dp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/godutch_new_transaction_members"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         />
     <Space
         android:layout_width="match_parent"
@@ -105,7 +128,7 @@
             android:layout_weight="1"
             />
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/register_button"
+            android:id="@+id/create_transaction_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Add"
