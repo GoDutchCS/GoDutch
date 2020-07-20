@@ -25,7 +25,7 @@ public class GoDutchPartyFragment extends Fragment {
         parties.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         parties.setLayoutManager(layoutManager);
-        adapter = new GoDutchPartyAdapter(getContext(), userID);
+        adapter = new GoDutchPartyAdapter(this, userID);
         parties.setAdapter(adapter);
 
         return root;

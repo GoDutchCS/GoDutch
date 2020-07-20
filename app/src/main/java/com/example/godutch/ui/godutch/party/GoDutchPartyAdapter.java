@@ -1,6 +1,6 @@
 package com.example.godutch.ui.godutch.party;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -31,10 +31,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapter.GoDutchPartyViewHolder> {
+    private static int REQUEST_PARTY_DETAIL_ACTIVITY = 1;
     private OkHttpClient client = new OkHttpClient();
     private String userID;
     private ArrayList<JSONObject> parties;
-    private Context context;
+    private GoDutchPartyFragment fragment;
 
     public class GoDutchPartyViewHolder extends RecyclerView.ViewHolder {
         public RecyclerView partyMembers;
@@ -47,8 +48,8 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
         }
     }
 
-    public GoDutchPartyAdapter(Context context, String userID) {
-        this.context = context;
+    public GoDutchPartyAdapter(GoDutchPartyFragment fragment, String userID) {
+        this.fragment = fragment;
         this.userID = userID;
         fetchParties();
     }
@@ -73,12 +74,23 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
 
         holder.partyName.setText(partyID);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(fragment.getContext(), LinearLayoutManager.HORIZONTAL, false);
         holder.partyMembers.setLayoutManager(layoutManager);
         holder.partyMembers.setHasFixedSize(true);
 
-        GoDutchPartyRowAdapter adapter = new GoDutchPartyRowAdapter(this.context, userID, members);
+        GoDutchPartyRowAdapter adapter = new GoDutchPartyRowAdapter(fragment.getContext(), userID, members);
         holder.partyMembers.setAdapter(adapter);
+
+        final String intentPartyID = partyID;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(fragment.getActivity(), PartyDetailActivity.class);
+                intent.putExtra("USER_ID", fragment.getActivity().getIntent().getStringExtra("USER_ID"));
+                intent.putExtra("PARTY_ID", intentPartyID);
+                fragment.startActivityForResult(intent, REQUEST_PARTY_DETAIL_ACTIVITY);
+            }
+        });
     }
 
     @Override
@@ -118,5 +130,4 @@ public class GoDutchPartyAdapter extends RecyclerView.Adapter<GoDutchPartyAdapte
             }
         });
     }
-
 }
