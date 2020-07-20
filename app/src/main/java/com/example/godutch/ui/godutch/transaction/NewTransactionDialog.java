@@ -242,7 +242,7 @@ public class NewTransactionDialog extends AppCompatDialogFragment {
                         .load(String.format("https://graph.facebook.com/%s/picture?type=large", item.getString("id")))
                         .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
                         .into(holder.profile);
-                holder.name.setText(item.getString("first_name") + " " + item.getString("last_name"));
+                holder.name.setText(item.getString("first_name"));
             } catch (JSONException e) {
                 Log.e("NewPartyActivity", Log.getStackTraceString(e));
             }
@@ -288,7 +288,7 @@ public class NewTransactionDialog extends AppCompatDialogFragment {
                                 JSONObject element = null;
                                 try {
                                     element = partyMembers.getJSONObject(i);
-                                    memberNames[i] = element.getString("first_name") + " " + element.getString("last_name");
+                                    memberNames[i] = element.getString("first_name");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
