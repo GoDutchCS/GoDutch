@@ -3,6 +3,7 @@ package com.example.godutch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
@@ -18,11 +19,19 @@ import androidx.viewpager2.widget.ViewPager2;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
+    private int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(i == 0)
+            {Intent intent = new Intent(this, SplashActivity.class);
+            startActivity(intent);
+            i++;}
+
         setContentView(R.layout.activity_main);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -37,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_menu, menu);
+        menu.findItem(R.id.profile_button).setVisible(true);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:abdroid="http://schemas.android.com/apk/res-auto">
+    <font
+        android:font = "@font/clemente_semibold"
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        />
+
+    <font
+
+        android:font = "@font/arib"
+        android:fontWeight="400"
+        android:fontStyle="normal"
+        />
+    <font
+        android:fontStyle="normal"
+        android:font = "@font/arim"
+        abdroid:fontWeight = "400"
+        />
+    <font
+        android:font="@font/arisb"
+        android:fontStyle="normal"
+        android:fontWeight="400"/>
+</font-family>

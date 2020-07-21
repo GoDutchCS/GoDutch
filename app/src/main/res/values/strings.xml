@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">GoDutch</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Contacts</string>
     <string name="title_godutch">GoDutch</string>
     <string name="title_gallery">Gallery</string>
     <string name="facebook_app_id">289149312197482</string>
     <string name="fb_login_protocol_scheme">fb289149312197482</string>
+    <string name = "texthint">Search user</string>>
 </resources>

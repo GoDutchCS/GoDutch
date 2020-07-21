@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.godutch.Constants;
 import com.example.godutch.R;
+
 import com.example.godutch.ui.godutch.transaction.NewTransactionDialog;
 import com.example.godutch.ui.register.RegisterDialog;
 import com.google.android.material.button.MaterialButton;
@@ -40,6 +44,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import static java.util.Collections.addAll;
+
 
 public class PartyDetailActivity extends AppCompatActivity implements NewTransactionDialog.NewTransactionDialogListener {
     private static final int REQUEST_PARTY_RESOLVED_ACTIVITY = 1;
@@ -52,10 +58,12 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
     private MaterialButton jeongsan;
     private MaterialTextView partyName;
     private OkHttpClient client = new OkHttpClient();
+    private LinearLayout show_members;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.godutch_party_detail);
 
         userID = getIntent().getStringExtra("USER_ID");
@@ -87,6 +95,8 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
         transactions.setLayoutManager(tLayoutManager);
         transactionsAdapter = new TransactionsAdapter(userID);
         transactions.setAdapter(transactionsAdapter);
+
+        show_members = findViewById(R.id.show_members_here);
     }
 
     public void launchNewTransactionDialog() {

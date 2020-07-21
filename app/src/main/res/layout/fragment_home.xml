@@ -8,22 +8,46 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.PhoneBookFragment">
 
-    <EditText
-        android:id="@+id/search_bar"
-        android:layout_height="50dp"
+
+    <LinearLayout
+        android:id="@+id/search_bar_layout"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="Search user"
-        android:inputType="text"
-        android:maxLines="1"
-        android:imeOptions="actionSearch"
-        />
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/search_badge"
+            android:layout_marginTop="3dp"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_baseline_search_24"
+            />
+
+        <EditText
+            android:id="@+id/search_bar"
+            android:layout_marginTop="7dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:layout_width="match_parent"
+            android:hint="@string/texthint"
+            android:inputType="text"
+            android:textSize="15dp"
+            android:maxLines="1"
+            android:imeOptions="actionSearch"
+            android:lastBaselineToBottomHeight="@dimen/activity_vertical_margin"
+            />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-         android:paddingTop="55dp"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:layout_margin="10dp"
-         android:id="@+id/pb_recycler_view"
+        android:paddingTop="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:id="@+id/pb_recycler_view"
 
     />
 
@@ -67,6 +91,7 @@
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin_right"
         app:tint="@android:color/white"
+        app:backgroundTint="@color/orange"
         app:borderWidth="0dp"
         />
 

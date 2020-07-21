@@ -11,6 +11,12 @@
         <item name="android:background">#fff</item>
     </style>
     <style name="ScreenSlideTabText">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

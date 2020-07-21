@@ -12,6 +12,9 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -20,6 +23,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -73,6 +77,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
@@ -397,4 +402,10 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         options.setImageResource(R.drawable.ic_baseline_add_24);
         options.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.colorAccent));
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.top_menu, menu);
+        menu.findItem(R.id.profile_button).setVisible(false);
+            }
 }

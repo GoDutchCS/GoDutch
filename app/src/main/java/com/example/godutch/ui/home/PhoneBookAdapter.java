@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,9 +51,8 @@ public class PhoneBookAdapter extends RecyclerView.Adapter<PhoneBookAdapter.Phon
             number = itemView.findViewById(R.id.number);
             email = itemView.findViewById(R.id.email);
             photo = itemView.findViewById(R.id.photo);
-            //expandableList = itemView.findViewById(R.id.expandable_list);
-            //callButton = itemView.findViewById(R.id.call_button);
-            //smsButton = itemView.findViewById(R.id.sms_button);
+            photo.setBackground(new ShapeDrawable(new OvalShape()));
+            photo.setClipToOutline(true);
         }
 
         public void bind(final JsonData item) {
@@ -64,29 +65,8 @@ public class PhoneBookAdapter extends RecyclerView.Adapter<PhoneBookAdapter.Phon
             email.setText(item.getEmail());
             photo.setImageURI(item.getPhoto());
             if (photo.getDrawable() == null)
-                photo.setImageResource(R.drawable.no_picture);
+                photo.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
 
-//            callButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    if (ActivityCompat.checkSelfPermission(PhoneBookAdapter.this.context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
-//                        ActivityCompat.requestPermissions((Activity)PhoneBookAdapter.this.context, new String[]{ Manifest.permission.CALL_PHONE }, PhoneBookFragment.PERMISSIONS_CALL_PHONE);
-//                    else {
-//                        Intent call = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
-//                        context.startActivity(call);
-//                    }
-//                }
-//            });
-//
-//            smsButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    if (ActivityCompat.checkSelfPermission(PhoneBookAdapter.this.context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-//                        ActivityCompat.requestPermissions((Activity)PhoneBookAdapter.this.context, new String[]{ Manifest.permission.SEND_SMS }, PhoneBookFragment.PERMISSIONS_REQUEST_SEND_SMS);
-//                    else {
-//                        Intent send = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + item.getNumber()));
-//                        context.startActivity(send);
-//                    }
-//                }
-//            });
         }
     }
 

@@ -9,7 +9,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My Parties"
+        android:text="정산 내역"
         android:textSize="30dp"
         android:textColor="@android:color/black"
         />

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -164,6 +165,7 @@ public class NewPartyActivity extends AppCompatActivity {
         }
 
         public void fetchUsers() {
+            Log.v("Foo", userID);
             Request request = new Request.Builder()
                     .url(String.format("%s/api/users/list/%s", Constants.SERVER_IP, userID))
                     .build();
@@ -189,6 +191,9 @@ public class NewPartyActivity extends AppCompatActivity {
                                 notifyDataSetChanged();
                             } catch (JSONException e) {
                                 Log.e("NewPartyActivity", Log.getStackTraceString(e));
+                                Toast maketoast = Toast.makeText(getApplicationContext(), "Check server", Toast.LENGTH_SHORT);
+                                maketoast.show();
+
                             }
                         }
                     });
