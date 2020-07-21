@@ -8,36 +8,51 @@
     android:layout_marginTop="10dp"
     android:gravity="center_vertical"
     >
-    <androidx.cardview.widget.CardView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginRight="5dp"
-        android:backgroundTint="@android:color/transparent"
-        app:cardCornerRadius="15dp">
-        <ImageView
-            android:id="@+id/godutch_resolve_card_member_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center_horizontal"
-            />
-    </androidx.cardview.widget.CardView>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:weightSum="2"
         >
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/godutch_resolve_card_member_name"
-            android:text="Member Name"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:gravity="center"
-            />
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="To: "
+                android:layout_marginRight="10dp"
+                />
+            <androidx.cardview.widget.CardView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_gravity="center"
+                app:cardCornerRadius="15dp"
+                >
+                <ImageView
+                    android:id="@+id/godutch_resolve_card_member_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/godutch_resolve_card_member_name"
+                android:text="Member Name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:gravity="center"
+                />
+        </LinearLayout>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/godutch_resolve_card_member_money"
             android:text="Amount"
