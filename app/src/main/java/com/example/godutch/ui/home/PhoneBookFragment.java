@@ -87,7 +87,7 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
     private OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8"); //json 파일 형식 예고함
     String myFBid = "empty"; // facebook id로 본인 자료 찾아서 가져옴
-    protected FloatingActionButton options, numberAdd, upload_data;
+    protected FloatingActionButton options, upload_data;
     private EditText byname;
 
     @Override
@@ -195,22 +195,16 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
 
     private void animate() {
         if (isFabOpen) {
-            numberAdd.startAnimation(fab_close);
             upload_data.startAnimation(fab_close);
-            numberAdd.setVisibility(View.GONE);
             upload_data.setVisibility(View.GONE);
-            numberAdd.setClickable(false);
             upload_data.setClickable(false);
             options.animate().rotation(0)
                     .setInterpolator(new LinearInterpolator())
                     .setDuration(300);
             isFabOpen = false;
         } else {
-            numberAdd.startAnimation(fab_open);
             upload_data.startAnimation(fab_open);
-            numberAdd.setVisibility(View.VISIBLE);
             upload_data.setVisibility(View.VISIBLE);
-            numberAdd.setClickable(true);
             upload_data.setClickable(true);
             options.animate().rotation(135)
                     .setInterpolator(new LinearInterpolator())
