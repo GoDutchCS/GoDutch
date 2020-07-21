@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -270,11 +271,13 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
         public class DateTransactionsViewHolder extends RecyclerView.ViewHolder {
             MaterialTextView name;
             MaterialTextView amount;
+            MaterialTextView time;
 
             public DateTransactionsViewHolder(View itemView) {
                 super(itemView);
                 name = itemView.findViewById(R.id.godutch_transaction_name);
                 amount = itemView.findViewById(R.id.godutch_transaction_amount);
+                time = itemView.findViewById(R.id.godutch_transaction_time);
             }
         }
 
@@ -294,7 +297,8 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
             try {
                 JSONObject object = dateTransactions.getJSONObject(position);
                 holder.name.setText(object.getString("title"));
-                holder.amount.setText(object.getString("total") + "₩");
+                holder.amount.setText(object.getString("total") + "원");
+                holder.time.setText(object.getString("time").substring(0, 5));
             } catch (JSONException e) {
                 Log.e("PartyDetailActivity", Log.getStackTraceString(e));
             }
@@ -308,13 +312,16 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
 
     public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MembersViewHolder> {
         private JSONArray partyMembers;
+        private JSONObject namesMap;
 
         public class MembersViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
+            MaterialTextView textView;
 
             public MembersViewHolder(View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.party_detail_member_profile);
+                textView = itemView.findViewById(R.id.party_detail_member_name);
             }
         }
 
@@ -338,13 +345,14 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
             String memberID = null;
             try {
                 memberID = partyMembers.getString(position);
+                Glide.with(PartyDetailActivity.this)
+                        .load(String.format("https://graph.facebook.com/%s/picture?type=large", memberID))
+                        .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
+                        .into(holder.imageView);
+                holder.textView.setText(namesMap.getString(memberID));
             } catch (JSONException e) {
                 Log.e("PartyDetailActivity", Log.getStackTraceString(e));
             }
-            Glide.with(PartyDetailActivity.this)
-                    .load(String.format("https://graph.facebook.com/%s/picture?type=large", memberID))
-                    .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
-                    .into(holder.imageView);
         }
 
         @Override
@@ -371,6 +379,7 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
                             try {
                                 JSONObject data = new JSONObject(jsonString);
                                 MembersAdapter.this.partyMembers = data.getJSONArray("members");
+                                namesMap = data.getJSONObject("namesMap");
                                 notifyDataSetChanged();
                             } catch (JSONException e) {
                                 Log.e("PartyDetailActivity", Log.getStackTraceString(e));
@@ -380,6 +389,18 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
                 }
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getSupportActionBar().show();
     }
 }
 
