@@ -137,10 +137,11 @@ public class GoDutchMainFragment extends Fragment {
     }
 
     public void sendTransactionFinished(JSONObject oweInfo) throws JSONException {
+        Log.v("Foo oweinfo", oweInfo.toString());
         String postBody = "{\n" +
                 "\"party_id\": " + "\"" + oweInfo.getString("id") + "\",\n" +
-                "\"title\": " + "\"" + oweInfo.getString("title") + "\",\n" +
-                "\"cashflow_id\": " + "\"" + oweInfo.getString("cashflow_id") + "\"\n}";
+                "\"user_id\": " + "\"" + userID + "\",\n" +
+                "\"to\": " + "\"" + oweInfo.getString("to") + "\"\n}";
 
         RequestBody body = RequestBody.create(postBody, JSON);
         Request request = new Request.Builder()
