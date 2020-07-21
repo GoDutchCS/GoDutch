@@ -51,6 +51,36 @@ public class GoDutchPartyFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PARTY_DETAIL_ACTIVITY && resultCode == Activity.RESULT_OK)  {
+            String postBody = data.getStringExtra("party");
+            RequestBody body = RequestBody.create(postBody, JSON);
+            Request request = new Request.Builder()
+                    .url(String.format("%s/api/parties/add", Constants.SERVER_IP))
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    call.cancel();
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    final String jsonString = response.body().string();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((MainActivity)getActivity()).getViewPager().setCurrentItem(1);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     public GoDutchPartyAdapter getAdapter() {
         return this.adapter;
     }
