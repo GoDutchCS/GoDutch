@@ -293,7 +293,6 @@ public class NewTransactionDialog extends AppCompatDialogFragment {
                                     e.printStackTrace();
                                 }
                             }
-                            Log.v("Foo", "bar!!");
                             buyer.setAdapter(new ArrayAdapter<>(getContext(), R.layout.member_dropdown_item, memberNames));
                         }
                     });
