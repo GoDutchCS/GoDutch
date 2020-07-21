@@ -101,16 +101,6 @@ public class NewTransactionDialog extends AppCompatDialogFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                Log.v("Foo", "Title: " + title.getText());
-//                Log.v("Foo", "Buyer: " + buyer.getText());
-//                try {
-//                    Log.v("Foo", "Buyer ID: " + adapter.getPartyMembers().getJSONObject(getIndexOf(buyer.getText().toString())).getString("id"));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                Log.v("Foo", "Method: " + getSelectedRadioText());
-//                Log.v("Foo", "Chosen: " + adapter.getSelectedUsers().toString());
-//                Log.v("Foo", generateNewTransactionString());
             }
         });
 
