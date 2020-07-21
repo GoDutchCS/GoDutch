@@ -18,12 +18,13 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:hint="Transaction Title"
+            android:hint="Amount(₩)"
             android:background="@android:color/transparent"
             app:boxBackgroundColor="@android:color/transparent"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/godutch_new_transaction_title"
+                android:id="@+id/godutch_new_transaction_amount"
+                android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
@@ -34,13 +35,12 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:hint="Amount(₩)"
+            android:hint="Transaction Title"
             android:background="@android:color/transparent"
             app:boxBackgroundColor="@android:color/transparent"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/godutch_new_transaction_amount"
-                android:inputType="number"
+                android:id="@+id/godutch_new_transaction_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
