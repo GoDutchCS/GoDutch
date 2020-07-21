@@ -7,64 +7,71 @@
     android:padding="10dp"
     android:layout_marginTop="10dp"
     android:gravity="center_vertical"
-    android:weightSum="4"
     >
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_weight="1"
+        android:weightSum="4"
         android:layout_height="match_parent"
-        android:layout_weight="2"
         >
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="To: "
-            android:layout_marginRight="10dp"
-            />
-        <androidx.cardview.widget.CardView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:backgroundTint="@android:color/transparent"
-            android:layout_gravity="center"
-            app:cardCornerRadius="15dp"
-            >
-            <ImageView
-                android:id="@+id/godutch_owe_member_photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center_horizontal"
-                />
-        </androidx.cardview.widget.CardView>
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/godutch_owe_member_name"
-            android:text="Member Name"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textSize="16sp"
+            android:layout_weight="2"
             android:gravity="center"
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_gravity="center"
+                app:cardCornerRadius="15dp"
+                >
+                <ImageView
+                    android:id="@+id/godutch_owe_member_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/godutch_owe_member_name"
+                android:text="Member Name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:gravity="center|left"
+                />
+        </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/godutch_owe_party_name"
+            android:text="Party Name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:layout_weight="1"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/godutch_owe_member_amount"
+            android:text="Amount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:gravity="center|left"
+            android:layout_weight="1"
             />
     </LinearLayout>
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/godutch_owe_party_name"
-        android:text="Party Name"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_weight="1"
-        />
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/godutch_owe_member_amount"
-        android:text="Amount"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:layout_weight="1"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/godutch_owe_member_cheongsan"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:backgroundTint="@color/material_blue"
+        android:text="청산"
         />
 </LinearLayout>
