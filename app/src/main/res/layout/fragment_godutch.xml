@@ -48,12 +48,18 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/new_party_button"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="새로운 팟 생성"
                 android:textColor="@android:color/white"
                 android:textSize="18dp"
                 android:backgroundTint="@color/material_blue"
+                android:layout_gravity="center"
+                />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 />
         </LinearLayout>
         <Space
@@ -63,8 +69,8 @@
             />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/main_list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/godutch_main_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
