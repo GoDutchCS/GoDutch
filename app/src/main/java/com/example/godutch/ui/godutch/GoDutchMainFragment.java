@@ -50,6 +50,7 @@ public class GoDutchMainFragment extends Fragment {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private GoDutchViewModel goDutchViewModel;
     private MaterialButton partyGenButton;
+    private MaterialTextView mainListLabel;
     private RecyclerView mainList;
     private MainListAdapter adapter;
     private OkHttpClient client = new OkHttpClient();
@@ -68,6 +69,8 @@ public class GoDutchMainFragment extends Fragment {
                 launchNewPartyActivity();
             }
         });
+
+        mainListLabel = root.findViewById(R.id.godutch_main_header);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mainList = root.findViewById(R.id.godutch_main_list);
@@ -201,6 +204,7 @@ public class GoDutchMainFragment extends Fragment {
                                 JSONObject resultObject = new JSONObject(jsonString);
                                 namesMap = resultObject.getJSONObject("namesMap");
                                 owePeople = resultObject.getJSONArray("result");
+                                mainListLabel.setText(String.format("%s의 빚더미", namesMap.getString(userID)));
                                 notifyDataSetChanged();
                             } catch (JSONException e) {
                                 Log.e("GoDutchMainFragment", Log.getStackTraceString(e));
