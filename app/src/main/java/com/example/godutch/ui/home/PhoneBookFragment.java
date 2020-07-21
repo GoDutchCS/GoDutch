@@ -99,10 +99,6 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
             Toast workdone = Toast.makeText(this.getContext(), "Upload succeed", Toast.LENGTH_SHORT );
             workdone.show();
         }
-        else if(id == R.id.add_number){
-            animate();
-
-        }
         else if(id== R.id.add_options){
             animate();
 
@@ -172,8 +168,6 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
 
         options = root.findViewById(R.id.add_options);
         options.setOnClickListener(this);
-        numberAdd = root.findViewById(R.id.add_number);
-        numberAdd.setOnClickListener(this);
         upload_data = root.findViewById(R.id.update);
         upload_data.setOnClickListener(this);
 
