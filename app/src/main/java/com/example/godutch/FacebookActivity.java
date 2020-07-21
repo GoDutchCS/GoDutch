@@ -117,7 +117,7 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
         Iterator<String> keys = userData.keys();
         JSONObject postBody = new JSONObject();
         postBody.put("account_number", accountNumber);
-        postBody.put("phone_number", phoneNumber);
+        postBody.put("phone_number", phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 7) + "-" + phoneNumber.substring(7, 11));
         postBody.put("bank_type", bankType);
         while (keys.hasNext()) {
             String key = keys.next();
