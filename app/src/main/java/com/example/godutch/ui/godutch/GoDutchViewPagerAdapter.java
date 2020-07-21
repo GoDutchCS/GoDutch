@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.godutch.ui.godutch.party.GoDutchPartyFragment;
 
 public class GoDutchViewPagerAdapter extends FragmentStateAdapter {
-    private final Fragment[] fragments = new Fragment[] {
+    private Fragment[] fragments = new Fragment[] {
             new GoDutchMainFragment(),
             new GoDutchPartyFragment()
     };
@@ -40,5 +40,9 @@ public class GoDutchViewPagerAdapter extends FragmentStateAdapter {
 
     public String getFragmentName(int position) {
         return this.fragmentNames[position];
+    }
+
+    public Fragment getFragment(int position) {
+        return this.fragments[position];
     }
 }

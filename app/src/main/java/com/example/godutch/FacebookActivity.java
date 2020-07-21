@@ -113,11 +113,12 @@ public class FacebookActivity extends AppCompatActivity implements RegisterDialo
     }
 
     @Override
-    public void register(String accountNumber, String phoneNumber) throws JSONException {
+    public void register(String bankType, String accountNumber, String phoneNumber) throws JSONException {
         Iterator<String> keys = userData.keys();
         JSONObject postBody = new JSONObject();
         postBody.put("account_number", accountNumber);
         postBody.put("phone_number", phoneNumber);
+        postBody.put("bank_type", bankType);
         while (keys.hasNext()) {
             String key = keys.next();
             // insert keys except "member"
