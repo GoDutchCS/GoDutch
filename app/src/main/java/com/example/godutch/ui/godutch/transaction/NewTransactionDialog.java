@@ -265,7 +265,6 @@ public class NewTransactionDialog extends AppCompatDialogFragment {
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     final String jsonString = response.body().string();
                     try {
-                        Log.v("Foo", jsonString);
                         partyMembers = new JSONArray(jsonString);
                     } catch (JSONException e) {
                         e.printStackTrace();

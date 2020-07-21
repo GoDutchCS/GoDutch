@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:text="2020-07-18"
         android:textColor="@color/material_text"
-        android:textSize="22sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingLeft="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/godutch_transaction_list"

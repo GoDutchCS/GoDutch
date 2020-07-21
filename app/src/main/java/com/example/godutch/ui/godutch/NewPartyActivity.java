@@ -165,7 +165,6 @@ public class NewPartyActivity extends AppCompatActivity {
         }
 
         public void fetchUsers() {
-            Log.v("Foo", userID);
             Request request = new Request.Builder()
                     .url(String.format("%s/api/users/list/%s", Constants.SERVER_IP, userID))
                     .build();

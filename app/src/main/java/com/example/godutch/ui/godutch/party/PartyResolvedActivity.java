@@ -206,4 +206,16 @@ public class PartyResolvedActivity extends AppCompatActivity {
             return thiefIDs == null ? 0 : thiefIDs.size();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getSupportActionBar().show();
+    }
 }

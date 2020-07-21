@@ -123,10 +123,8 @@ public class GoDutchMainFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
-                Log.v("Foo", jsonString);
                 try {
                     JSONObject result = new JSONObject(jsonString);
-                    Log.v("Foo result", result.toString());
                     tossRequest(oweInfo.getString("to"), result.getString("bank_type"), result.getString("account_number"), oweInfo.getInt("amount"));
                     sendTransactionFinished(oweInfo);
                 } catch (JSONException e) {
@@ -137,7 +135,6 @@ public class GoDutchMainFragment extends Fragment {
     }
 
     public void sendTransactionFinished(JSONObject oweInfo) throws JSONException {
-        Log.v("Foo oweinfo", oweInfo.toString());
         String postBody = "{\n" +
                 "\"party_id\": " + "\"" + oweInfo.getString("id") + "\",\n" +
                 "\"user_id\": " + "\"" + userID + "\",\n" +
@@ -194,7 +191,6 @@ public class GoDutchMainFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String jsonString = response.body().string();
-                Log.v("Foo", jsonString);
                 try {
                     JSONObject result = new JSONObject(jsonString);
                     if (result.getString("resultType").equals("SUCCESS")) {
