@@ -72,6 +72,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:backgroundTint="@color/material_blue"
-        android:text="청산"
+        android:text="송금"
         />
 </LinearLayout>
