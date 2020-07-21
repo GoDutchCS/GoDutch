@@ -10,12 +10,16 @@
 
     <EditText
         android:id="@+id/search_bar"
-        android:layout_height="50dp"
+        android:layout_marginTop="7dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
         android:layout_width="match_parent"
-        android:hint="Search user"
+        android:hint="@string/texthint"
         android:inputType="text"
+        android:textSize="20dp"
         android:maxLines="1"
         android:imeOptions="actionSearch"
+
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -67,6 +71,7 @@
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin_right"
         app:tint="@android:color/white"
+        app:backgroundTint="@color/orange"
         app:borderWidth="0dp"
         />
 

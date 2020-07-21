@@ -9,7 +9,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="60dp"
         app:tabTextAppearance="@style/ScreenSlideTabText"
         />
 
