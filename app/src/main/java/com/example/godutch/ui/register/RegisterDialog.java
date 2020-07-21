@@ -3,12 +3,12 @@ package com.example.godutch.ui.register;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -23,6 +23,7 @@ public class RegisterDialog extends AppCompatDialogFragment {
     private TextInputEditText phoneNumber;
     private RegisterDialogListener listener;
     private MaterialButton registerButton;
+    private AutoCompleteTextView bankType;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,6 +32,10 @@ public class RegisterDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.register_dialog, null);
         builder.setView(view)
                 .setTitle("Register");
+        bankType = view.findViewById(R.id.bank_type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.bank_type_dropdown, new String[]{ "우리", "신한", "하나", "농협", "카카오뱅크" });
+        bankType.setAdapter(adapter);
+
         accountNumber = view.findViewById(R.id.account_number);
         phoneNumber = view.findViewById(R.id.phone_number);
         registerButton = view.findViewById(R.id.register_button);
@@ -39,9 +44,10 @@ public class RegisterDialog extends AppCompatDialogFragment {
             public void onClick(View view) {
                 String account = accountNumber.getText().toString();
                 String phone = phoneNumber.getText().toString();
+                String bank = bankType.getText().toString();
 
                 try {
-                    listener.register(account, phone);
+                    listener.register(bank, account, phone);
                 } catch (JSONException e) {
                     Log.e("RegisterDialog", Log.getStackTraceString(e));
                 }
@@ -61,6 +67,6 @@ public class RegisterDialog extends AppCompatDialogFragment {
     }
 
     public interface RegisterDialogListener {
-        void register(String accountNumber, String phoneNumber) throws JSONException;
+        void register(String bankType, String accountNumber, String phoneNumber) throws JSONException;
     }
 }
