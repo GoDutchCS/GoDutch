@@ -230,7 +230,6 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == keyEvent.KEYCODE_ENTER){
                     String tofind = byname.getText().toString();
-                    //if(tofind.length()>0) {adapter.fillter(tofind, backupList);}
                     adapter.fillter(tofind, backupList);
                 }
 

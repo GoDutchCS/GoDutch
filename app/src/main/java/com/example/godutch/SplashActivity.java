@@ -1,5 +1,6 @@
 package com.example.godutch;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,6 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 finish();
             }
-        }, 2000);
+        }, 1700);
     }
 }
