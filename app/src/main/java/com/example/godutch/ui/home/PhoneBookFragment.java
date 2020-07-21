@@ -2,10 +2,12 @@ package com.example.godutch.ui.home;
 
 import android.Manifest;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -19,9 +21,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -54,6 +58,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 public class PhoneBookFragment extends Fragment implements View.OnClickListener{
     protected static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     protected static final int PERMISSIONS_REQUEST_SEND_SMS = 2;
@@ -82,6 +88,7 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8"); //json 파일 형식 예고함
     String myFBid = "empty"; // facebook id로 본인 자료 찾아서 가져옴
     protected FloatingActionButton options, numberAdd, upload_data;
+    private EditText byname;
 
     @Override
     public void onClick(View v) {
@@ -133,55 +140,6 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
     }
 
 
-//
-//    public void onViewCreated (@NonNull LayoutInflater inflater,
-//    ViewGroup container, Bundle savedInstanceState){
-//        final Observer<ArrayList<JsonData>> contactObserver = new Observer<ArrayList<JsonData>>() {
-//            @Override
-//            public void onChanged(@Nullable final ArrayList<JsonData> newContacts) {
-//                adapter.updateItems(newContacts);
-//            }
-//        };
-//        View root = inflater.inflate(R.layout.fragment_home, container, false);
-//        Log.d("검색", "외않되");
-//        //검색
-//        btn = root.findViewById(R.id.button_load);
-//        //DB에 올린다
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                try{
-//                    String contact = phoneBookViewModel.getContacts().getValue().toString();
-//                    String topass = "{ \"id\" : \"" + myFBid + "\", " + "\"contacts\" : " + contact + "}";
-//                    Log.d("서버 전송", topass);
-//                    RequestBody body = RequestBody.create(topass, JSON);
-//                    Request request = new Request.Builder()
-//                            .url(String.format("%s/api/contacts/insert", Constants.SERVER_IP))
-//                            .post(body)
-//                            .build();
-//                    client.newCall(request).enqueue(new Callback() {
-//                        @Override
-//                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                            Log.d("서버 Fail", "실패");
-//                            call.cancel();
-//                        }
-//
-//                        @Override
-//                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//                            final String jsonString = response.body().string();
-//                            Log.d("서버 respond", jsonString);
-//                        }
-//                    });
-//
-//                }catch(NullPointerException e){
-//                    Log.d("서버 전송 안함", e.toString());
-//                }
-//
-//            }
-//        });
-//
-//    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -223,8 +181,7 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
         fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
 
 
-        //검색
-        final EditText byname = root.findViewById(R.id.search_bar);
+        byname = root.findViewById(R.id.search_bar);
         View.OnKeyListener keyListener = new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -236,8 +193,8 @@ public class PhoneBookFragment extends Fragment implements View.OnClickListener{
                 return false;
             }
         };
-        byname.setOnKeyListener(keyListener);
 
+        byname.setOnKeyListener(keyListener);
 
         return root;
     }
