@@ -247,8 +247,8 @@ public class PartyDetailActivity extends AppCompatActivity implements NewTransac
                         public void run() {
                             try {
                                 if (TransactionsAdapter.this.transactions.size() != 1) {
-                                    TransactionsAdapter.this.transactions.clear();
-                                    TransactionsAdapter.this.transactions.add(null);
+                                    TransactionsAdapter.this.transactions = new ArrayList<JSONObject>();
+                                    TransactionsAdapter.this.transactions.add(new JSONObject("{}"));
                                 }
                                 JSONArray array = new JSONArray(jsonString);
                                 for (int i = 0; i < array.length(); i++) {
