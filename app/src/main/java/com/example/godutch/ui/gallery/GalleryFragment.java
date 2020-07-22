@@ -62,6 +62,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
     private Animation fab_open, fab_close;
     private RecyclerView recyclerView;
     private Uri currentImageUri;
+    private String userID;
     private boolean isFabOpen = false;
     protected boolean deleteMode = false;
     private static int PICK_IMAGE_MULTIPLE = 1;
@@ -80,6 +81,8 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
 
         galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+
+        userID = getActivity().getIntent().getStringExtra("USER_ID");
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getContext(), 3);
         recyclerView = root.findViewById(R.id.gallery);
@@ -310,7 +313,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         });
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("id", getActivity().getIntent().getStringExtra("USER_ID"));
+                .addFormDataPart("id", userID);
         if (single) {
             Uri imageUri = data.getData();
             builder = addImageFromUri(builder, imageUri);

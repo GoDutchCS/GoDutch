@@ -146,11 +146,15 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                         try {
                             JSONObject data = new JSONObject(jsonString);
                             JSONArray photos = data.getJSONArray("photos");
+                            if (photos.length() == 0) {
+                                ImageGalleryAdapter.this.photos = new ArrayList<>();
+                                return;
+                            }
                             ImageGalleryAdapter.this.photos = new ArrayList<>(photos.length());
                             for (int i = 0; i < photos.length(); i++) {
                                 ImageGalleryAdapter.this.photos.add(
                                         new GoDutchPhoto(
-                                                String.format("%s/%s", Constants.SERVER_IP, photos.getString(i)),
+                                                String.format("%s%s", Constants.SERVER_IP, photos.getString(i)),
                                                 "test"
                                         )
                                 );
