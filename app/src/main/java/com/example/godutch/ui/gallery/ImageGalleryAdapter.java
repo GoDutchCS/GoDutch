@@ -154,7 +154,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
                             for (int i = 0; i < photos.length(); i++) {
                                 ImageGalleryAdapter.this.photos.add(
                                         new GoDutchPhoto(
-                                                String.format("%s%s", Constants.SERVER_IP, photos.getString(i)),
+                                                String.format("%s/%s", Constants.SERVER_IP, photos.getString(i)),
                                                 "test"
                                         )
                                 );
