@@ -162,6 +162,12 @@ public class GoDutchMainFragment extends Fragment {
                         adapter.fetchOweResult();
                     }
                 }, 8000);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Launching Toss...", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }
