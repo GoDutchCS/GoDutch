@@ -9,6 +9,7 @@ This project is for the 2nd week of *KAIST CS496 Immersion Camp: Intensive Progr
 |Launch Screen|Login|
 |-------------|-----|
 |![Launch](https://i.imgur.com/g5NQBtD.jpg)|![Login/Registration](https://i.imgur.com/7Tnjumx.jpg)|
+
 Login is implemented by using the Facebook SDK for Android. Upon the push of a button, the application will prompt users to register by putting in the phone number and bank account, both of which are used throughout the application.
 
 ## Tabs
@@ -21,6 +22,7 @@ The central list shows a list of phone numbers stored in the DB. If the server c
 |Gallery Page|Deletion|
 |------------|--------|
 |![Gallery Page](https://i.imgur.com/gLxaigl.jpg)|![Deletion](https://i.imgur.com/f2dZAXc.jpg)|
+
 The gallery tab shows the photos that the user has uploaded to his/her account. The user has 2 methods of uploading images to the server: from the gallery or directly from the photo taken from a camera.
 
 The uploading process is done by sending a `multipart/form-data` content-type containing the images to the server. The server stores the images in its disk and serves the images using `nginx`, where the client retrieves the photos from.
