@@ -2,14 +2,14 @@
 
 *Your first-choice app for **going dutch***
 
-This project is for the 2nd week of *KAIST CS496 Immersion Camp: Intensive Programming and Startup*, the base requirements being **developing an android application using a backend server**.
+This project is for the 2nd week of *KAIST CS496 Immersion Camp: Intensive Programming and Startup*, the base requirements of the project being **developing an android application using a backend server**. Check out the server application [here](https://github.com/GoDutchCS496/GoDutch-Server)
 
 ## Login / Registration
 |Launch Screen|Login|
 |-------------|-----|
 |<img src="https://i.imgur.com/g5NQBtD.jpg" width="400">|<img src="https://i.imgur.com/7Tnjumx.jpg" width="400">|
 
-Login is implemented by using the Facebook SDK for Android. Upon the push of a button, the application will prompt users to register by putting in the phone number and bank account, both of which are used throughout the application.
+Login is implemented by using the Facebook SDK for Android. Upon the push of a button, the application will prompt users to register by putting in their phone number and bank account, both of which are used throughout the application.
 
 ## Tabs
 This application consists of 3 *tabs* - *contacts*, *gallery*, and *godutch*
@@ -20,7 +20,7 @@ The central list shows a list of phone numbers stored in the DB. If the server c
 ### Gallery
 |Gallery Page|Deletion|
 |------------|--------|
-|<img src="https://i.imgur.com/gLxaigl.jpg" width="400>|<img src="https://i.imgur.com/f2dZAXc.jpg" width="400">|
+|<img src="https://i.imgur.com/gLxaigl.jpg" width="400">|<img src="https://i.imgur.com/f2dZAXc.jpg" width="400">|
 
 The gallery tab shows the photos that the user has uploaded to his/her account. The user has 2 methods of uploading images to the server: from the gallery or directly from the photo taken from a camera.
 
